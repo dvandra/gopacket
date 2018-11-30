@@ -684,7 +684,13 @@ const (
 	SFlowTypeTokenRingInterfaceCounters SFlowCounterRecordType = 3
 	SFlowType100BaseVGInterfaceCounters SFlowCounterRecordType = 4
 	SFlowTypeVLANCounters               SFlowCounterRecordType = 5
+	SFlowTypeLACPCounters               SFlowCounterRecordType = 7
 	SFlowTypeProcessorCounters          SFlowCounterRecordType = 1001
+	SFlowTypeOpenflowPortCounters       SFlowCounterRecordType = 1004
+	SFlowTypePORTNAMECounters           SFlowCounterRecordType = 1005
+	SFLowTypeAPP_RESOURCESCounters      SFlowCounterRecordType = 2203
+	SFlowTypeOVSDPCounters              SFlowCounterRecordType = 2207
+
 )
 
 func (cr SFlowCounterRecordType) String() string {
@@ -699,8 +705,18 @@ func (cr SFlowCounterRecordType) String() string {
 		return "100BaseVG Interface Counters"
 	case SFlowTypeVLANCounters:
 		return "VLAN Counters"
+	case SFlowTypeLACPCounters:
+		return "LACP Counters"
 	case SFlowTypeProcessorCounters:
 		return "Processor Counters"
+	case SFlowTypeOpenflowPortCounters:
+		return "Openflow Port Counters"
+	case SFlowTypePORTNAMECounters:
+		return "PORT NAME Counters"
+	case SFLowTypeAPP_RESOURCESCounters:
+		return "App Resources Counters"
+	case SFlowTypeOVSDPCounters:
+		return "OVSDP Counters"
 	default:
 		return ""
 
@@ -751,8 +767,32 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 		case SFlowTypeVLANCounters:
 			skipRecord(data)
 			return s, errors.New("skipping TypeVLANCounters")
+		case SFlowTypeLACPCounters:
+			skipRecord(data)
+			return s, errors.New("skipping TypeLACPCounters")
 		case SFlowTypeProcessorCounters:
 			if record, err := decodeProcessorCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
+		case SFlowTypeOpenflowPortCounters:
+			if record, err := decodeOpenflowportCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
+		case SFlowTypePORTNAMECounters:
+			skipRecord(data)
+			return s, errors.New("skipping PORT NAME Counters")
+		case SFLowTypeAPP_RESOURCESCounters:
+			if record, err := decodeApp_resourcesCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
+		case SFlowTypeOVSDPCounters:
+			if record, err := decodeOVSDPCounters(data); err == nil {
 				s.Records = append(s.Records, record)
 			} else {
 				return s, err
@@ -1972,6 +2012,8 @@ func (bcr SFlowBaseCounterRecord) GetType() SFlowCounterRecordType {
 		return SFlowTypeVLANCounters
 	case SFlowTypeProcessorCounters:
 		return SFlowTypeProcessorCounters
+	case SFlowTypeopenflowportCounters
+
 
 	}
 	unrecognized := fmt.Sprint("Unrecognized counter record type:", bcr.Format)
@@ -2185,3 +2227,98 @@ func decodeProcessorCounters(data *[]byte) (SFlowProcessorCounters, error) {
 
 	return pc, nil
 }
+
+type SFlowOpenflowPortCounters struct {
+	SFlowBaseCounterRecord
+	Datapath_id  unit64
+	Port_no      unit32
+}
+
+func decodeOpenflowportCounters(data *[]byte) (SFlowOpenflowPortCounters, error) {
+	ofp := SFlowOpenflowPortCounters{}
+	var cdf SFlowCounterDataFormat
+	//var high32, low32 uint32
+
+	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
+	ofp.EnterpriseID, ofp.Format = cdf.decode()
+	*data, ofp.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ofp.Datapath_id = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
+	*data, ofp.Port_no = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+
+	return ofp, nil
+}
+
+type SFlowApp_resourcesCounters struct {
+	SFlowBaseCounterRecord
+	user_time   unit32
+	system_time unit32
+	mem_used    unit64
+	mem_max     unit64
+	fd_open     unit32
+	fd_max      unit32
+	conn_open   unit32
+	conn_max    unit32
+}
+
+func decodeApp_resourcesCounters(data *[]byte) (SFlowApp_resourcesCounters, error) {
+	app := SFlowApp_resourcesCounters{}
+	var cdf SFlowCounterDataFormat
+	//var high32, low32 uint32
+
+	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
+	app.EnterpriseID, app.Format = cdf.decode()
+	*data, app.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.user_time = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.system_time = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.mem_used = (*data)[8:], binary.BigEndian.Uint32((*data)[:8])
+	*data, app.mem_max = (*data)[8:], binary.BigEndian.Uint32((*data)[:8])
+	*data, app.fd_open = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.fd_max = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.conn_open = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, app.conn_max = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+
+	return app, nil
+
+}
+
+type SFlowOVSDPCounters struct {
+	SFlowBaseCounterRecord
+	n_hit      unit32
+	n_missed   unit32
+	n_lost     unit32
+	n_mask_hit unit32
+	n_flows    unit32
+	n_masks    unit32
+}
+
+func decodeOVSDPCounters(data *[]byte) (SFlowOVSDPCounters, error) {
+	ovsdp := SFlowOVSDPCounters{}
+	var cdf SFlowCounterDataFormat
+
+	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
+	ovsdp.EnterpriseID, ovsdp.Format = cdf.decode()
+	*data, ovsdp.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_missed = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_lost = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_mask_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_flows = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, ovsdp.n_masks = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+
+	return ovsdp, nil
+}
+
+/*type SFlowPORTNAME struct {
+	SFlowBaseCounterRecord
+	len unit32
+	str *char
+}
+
+/*func decodePortnameCounters(data *[]byte) (SFlowPORTNAME, error) {
+	pn := SFlowPORTNAME{}
+	var cdf SFlowCounterDataFormat
+
+	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
+	pn.EnterpriseID, pn.Format = cdf.decode()
+
+}*/
