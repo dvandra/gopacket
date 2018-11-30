@@ -688,7 +688,7 @@ const (
 	SFlowTypeProcessorCounters          SFlowCounterRecordType = 1001
 	SFlowTypeOpenflowPortCounters       SFlowCounterRecordType = 1004
 	SFlowTypePORTNAMECounters           SFlowCounterRecordType = 1005
-	SFLowTypeAPP_RESOURCESCounters      SFlowCounterRecordType = 2203
+	SFLowTypeAPPRESOURCESCounters      SFlowCounterRecordType = 2203
 	SFlowTypeOVSDPCounters              SFlowCounterRecordType = 2207
 
 )
@@ -713,7 +713,7 @@ func (cr SFlowCounterRecordType) String() string {
 		return "Openflow Port Counters"
 	case SFlowTypePORTNAMECounters:
 		return "PORT NAME Counters"
-	case SFLowTypeAPP_RESOURCESCounters:
+	case SFLowTypeAPPRESOURCESCounters:
 		return "App Resources Counters"
 	case SFlowTypeOVSDPCounters:
 		return "OVSDP Counters"
@@ -785,8 +785,8 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 		case SFlowTypePORTNAMECounters:
 			skipRecord(data)
 			return s, errors.New("skipping PORT NAME Counters")
-		case SFLowTypeAPP_RESOURCESCounters:
-			if record, err := decodeApp_resourcesCounters(data); err == nil {
+		case SFLowTypeAPPRESOURCESCounters:
+			if record, err := decodeAppresourcesCounters(data); err == nil {
 				s.Records = append(s.Records, record)
 			} else {
 				return s, err
@@ -2010,11 +2010,18 @@ func (bcr SFlowBaseCounterRecord) GetType() SFlowCounterRecordType {
 		return SFlowType100BaseVGInterfaceCounters
 	case SFlowTypeVLANCounters:
 		return SFlowTypeVLANCounters
+	case SFlowTypeLACPCounters:
+		return SFlowTypeLACPCounters
 	case SFlowTypeProcessorCounters:
 		return SFlowTypeProcessorCounters
-	case SFlowTypeopenflowportCounters
-
-
+	case SFlowTypeOpenflowPortCounters:
+		return SFlowTypeOpenflowPortCounters
+	case SFlowTypePORTNAMECounters:
+		return SFlowTypePORTNAMECounters
+	case SFLowTypeAPPRESOURCESCounters:
+		return SFLowTypeAPPRESOURCESCounters
+	case SFlowTypeOVSDPCounters:
+		return SFlowTypeOVSDPCounters
 	}
 	unrecognized := fmt.Sprint("Unrecognized counter record type:", bcr.Format)
 	panic(unrecognized)
@@ -2248,7 +2255,7 @@ func decodeOpenflowportCounters(data *[]byte) (SFlowOpenflowPortCounters, error)
 	return ofp, nil
 }
 
-type SFlowApp_resourcesCounters struct {
+type SFlowAppresourcesCounters struct {
 	SFlowBaseCounterRecord
 	user_time   unit32
 	system_time unit32
@@ -2260,8 +2267,8 @@ type SFlowApp_resourcesCounters struct {
 	conn_max    unit32
 }
 
-func decodeApp_resourcesCounters(data *[]byte) (SFlowApp_resourcesCounters, error) {
-	app := SFlowApp_resourcesCounters{}
+func decodeAppresourcesCounters(data *[]byte) (SFlowAppresourcesCounters, error) {
+	app := SFlowAppresourcesCounters{}
 	var cdf SFlowCounterDataFormat
 	//var high32, low32 uint32
 
