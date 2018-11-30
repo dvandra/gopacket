@@ -2237,8 +2237,8 @@ func decodeProcessorCounters(data *[]byte) (SFlowProcessorCounters, error) {
 
 type SFlowOpenflowPortCounters struct {
 	SFlowBaseCounterRecord
-	Datapath_id  unit64
-	Port_no      unit32
+	Datapath_id  uint64
+	Port_no      uint32
 }
 
 func decodeOpenflowportCounters(data *[]byte) (SFlowOpenflowPortCounters, error) {
@@ -2257,14 +2257,14 @@ func decodeOpenflowportCounters(data *[]byte) (SFlowOpenflowPortCounters, error)
 
 type SFlowAppresourcesCounters struct {
 	SFlowBaseCounterRecord
-	user_time   unit32
-	system_time unit32
-	mem_used    unit64
-	mem_max     unit64
-	fd_open     unit32
-	fd_max      unit32
-	conn_open   unit32
-	conn_max    unit32
+	user_time   uint32
+	system_time uint32
+	mem_used    uint64
+	mem_max     uint64
+	fd_open     uint32
+	fd_max      uint32
+	conn_open   uint32
+	conn_max    uint32
 }
 
 func decodeAppresourcesCounters(data *[]byte) (SFlowAppresourcesCounters, error) {
@@ -2290,12 +2290,12 @@ func decodeAppresourcesCounters(data *[]byte) (SFlowAppresourcesCounters, error)
 
 type SFlowOVSDPCounters struct {
 	SFlowBaseCounterRecord
-	n_hit      unit32
-	n_missed   unit32
-	n_lost     unit32
-	n_mask_hit unit32
-	n_flows    unit32
-	n_masks    unit32
+	n_hit      uint32
+	n_missed   uint32
+	n_lost     uint32
+	n_mask_hit uint32
+	n_flows    uint32
+	n_masks    uint32
 }
 
 func decodeOVSDPCounters(data *[]byte) (SFlowOVSDPCounters, error) {
