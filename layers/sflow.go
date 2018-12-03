@@ -783,8 +783,11 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 				return s, err
 			}
 		case SFlowTypePORTNAMECounters:
-			skipRecord(data)
-			return s, errors.New("skipping PORT NAME Counters")
+			if record, err := decodePortnameCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
 		case SFLowTypeAPPRESOURCESCounters:
 			if record, err := decodeAppresourcesCounters(data); err == nil {
 				s.Records = append(s.Records, record)
@@ -2315,17 +2318,25 @@ func decodeOVSDPCounters(data *[]byte) (SFlowOVSDPCounters, error) {
 	return ovsdp, nil
 }
 
-/*type SFlowPORTNAME struct {
+/*type SFLString struct {
+
+}*/
+
+type SFlowPORTNAME struct {
 	SFlowBaseCounterRecord
-	len unit32
-	str *char
+	len uint32
+	str string
 }
 
-/*func decodePortnameCounters(data *[]byte) (SFlowPORTNAME, error) {
+func decodePortnameCounters(data *[]byte) (SFlowPORTNAME, error) {
 	pn := SFlowPORTNAME{}
 	var cdf SFlowCounterDataFormat
 
 	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
 	pn.EnterpriseID, pn.Format = cdf.decode()
+	*data, pn.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, pn.len = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, pn.str = (*data)[1:], string((*data)[:1])
 
-}*/
+    return pn, nil
+}
