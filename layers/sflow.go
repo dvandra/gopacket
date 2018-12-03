@@ -2336,7 +2336,7 @@ func decodePortnameCounters(data *[]byte) (SFlowPORTNAME, error) {
 	pn.EnterpriseID, pn.Format = cdf.decode()
 	*data, pn.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, pn.len = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, pn.str = (*data)[1:], string((*data)[:1])
+	*data, pn.str = (*data)[8:], string(binary.BigEndian.Uint64((*data)[:8]))
 
     return pn, nil
 }
