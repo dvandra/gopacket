@@ -2276,7 +2276,6 @@ type SFlowAppresourcesCounters struct {
 func decodeAppresourcesCounters(data *[]byte) (SFlowAppresourcesCounters, error) {
 	app := SFlowAppresourcesCounters{}
 	var cdf SFlowCounterDataFormat
-	//var high32, low32 uint32
 
 	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
 	app.EnterpriseID, app.Format = cdf.decode()
@@ -2351,12 +2350,16 @@ type SFLLACPportState struct {
 	partnerOper uint8
 }
 
+type EthAdd struct {
+	eth [3]uint16
+}
+
 type LACPcounters struct {
 	SFlowBaseCounterRecord
-	actorSystemID uint64
-	pad1_2 uint8
-	partnerSystemID uint64
-	pad2_2 uint8
+	actorSystemID EthAdd
+	pad1 [2]uint8
+	partnerSystemID EthAdd
+	pad2 [2]uint8
 	attachedAggID uint32
 	lacp_portstate SFLLACPportState
 	LACPDUsRx uint32
@@ -2376,10 +2379,16 @@ func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
 	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
 	la.EnterpriseID, la.Format = cdf.decode()
 	*data, la.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, la.actorSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, la.pad1_2 = (*data)[1:], (*data)[0]
-	*data, la.partnerSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, la.pad2_2 = (*data)[1:], (*data)[0]
+	*data, la.actorSystemID.eth[0] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.actorSystemID.eth[1] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.actorSystemID.eth[2] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.pad1[0] = (*data)[1:], (*data)[0]
+	*data, la.pad1[1] = (*data)[1:], (*data)[0]
+	*data, la.partnerSystemID.eth[0] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.partnerSystemID.eth[1] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.partnerSystemID.eth[2] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
+	*data, la.pad2[0] = (*data)[1:], (*data)[0]
+	*data, la.pad2[1] = (*data)[1:], (*data)[0]
 	*data, la.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
