@@ -2357,9 +2357,9 @@ type EthAdd struct {
 type LACPcounters struct {
 	SFlowBaseCounterRecord
 	actorSystemID EthAdd
-	pad1_2 uint8
+	pad1 [2]uint8
 	partnerSystemID EthAdd
-	pad2_2 uint8
+	pad2 [2]uint8
 	attachedAggID uint32
 	lacp_portstate SFLLACPportState
 	LACPDUsRx uint32
@@ -2382,19 +2382,19 @@ func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
 	*data, la.actorSystemID.eth[0] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
 	*data, la.actorSystemID.eth[1] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
 	*data, la.actorSystemID.eth[2] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
-	*data, la.pad1_2 = (*data)[1:], (*data)[0]
-	//*data, la.pad1[1] = (*data)[1:], (*data)[0]
+	*data, la.pad1[0] = (*data)[1:], (*data)[0]
+	*data, la.pad1[1] = (*data)[1:], (*data)[0]
 	*data, la.partnerSystemID.eth[0] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
 	*data, la.partnerSystemID.eth[1] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
 	*data, la.partnerSystemID.eth[2] = (*data)[2:], binary.BigEndian.Uint16((*data)[:2])
-	*data, la.pad2_2 = (*data)[1:], (*data)[0]
-	//*data, la.pad2[1] = (*data)[1:], (*data)[0]
+	*data, la.pad2[0] = (*data)[1:], (*data)[0]
+	*data, la.pad2[1] = (*data)[1:], (*data)[0]
 	*data, la.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
-	*data, la.lacp_portstate.actorOper = (*data)[1:], (*data)[0]
-	*data, la.lacp_portstate.partnerAdmin = (*data)[1:], (*data)[0]
-	*data, la.lacp_portstate.partnerOper = (*data)[1:], (*data)[0]
+	//*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
+	//*data, la.lacp_portstate.actorOper = (*data)[1:], (*data)[0]
+	//*data, la.lacp_portstate.partnerAdmin = (*data)[1:], (*data)[0]
+	//*data, la.lacp_portstate.partnerOper = (*data)[1:], (*data)[0]
 	*data, la.LACPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.markerPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.markerResponsePDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
