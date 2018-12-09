@@ -977,9 +977,14 @@ func TestDecodeProcessorCounter(t *testing.T) {
 	}
 }
 
+/*
+2018-12-05T15:40:21.132+0530	INFO	sflow/agent.go:97 (*Agent).feedFlowTable	localhost.localdomain: Value of p = PACKET: 244 bytes- Layer 1 (00 bytes) = SFlow	{Contents=[] Payload=[] DatagramVersion=5 AgentAddress=127.0.0.1 SubAgentID=0 SequenceNumber=15040 AgentUptime=83113000 SampleCount=1 FlowSamples=[] CounterSamples=[{EnterpriseID=Standard SFlow Format=Counter Sample SampleLength=208 SequenceNumber=2698 SourceIDClass=Single Interface SourceIDIndex=37 RecordCount=4 Records=[{EnterpriseID=Standard SFlow Format=Ethernet Interface Counters FlowDataLength=52 AlignmentErrors=0 FCSErrors=0 SingleCollisionFrames=4294967295 MultipleCollisionFrames=4294967295 SQETestErrors=4294967295 DeferredTransmissions=4294967295 LateCollisions=4294967295 ExcessiveCollisions=4294967295 InternalMacTransmitErrors=4294967295 CarrierSenseErrors=4294967295 FrameTooLongs=4294967295 InternalMacReceiveErrors=4294967295 SymbolErrors=4294967295}, {EnterpriseID=Standard SFlow Format=Openflow Port Counters FlowDataLength=12 Datapath_id=46198352887626 Port_no=2}, {EnterpriseID=Standard SFlow Format=PORT NAME Counters FlowDataLength=12}, {EnterpriseID=Standard SFlow Format=Generic Interface Counters FlowDataLength=88 IfIndex=37 IfType=6 IfSpeed=10000000000 IfDirection=1 IfStatus=3 IfInOctets=1986 IfInUcastPkts=27 IfInMulticastPkts=0 IfInBroadcastPkts=4294967295 IfInDiscards=0 IfInErrors=0 IfInUnknownProtos=4294967295 IfOutOctets=40206 IfOutUcastPkts=365 IfOutMulticastPkts=4294967295 IfOutBroadcastPkts=4294967295 IfOutDiscards=0 IfOutErrors=0 IfPromiscuousMode=0}]}]}
+
+*/
+
 /*0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x01,
-0x0a, 0x14, 0x04, 0x00, 0x00, 0x00, 0x00, 0x64,
-0x00, 0x01, 0x78, 0xe0, 0x73, 0x03, 0x48, 0x78,
+0x7f, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x3a, 0xc0, 0x73, 0x03, 0x48, 0x78,
 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x04,
 0x00, 0x00, 0x00, 0x34, 0x00, 0x01, 0x78, 0xe0,
 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01,
@@ -1004,11 +1009,11 @@ func TestDecodeProcessorCounter(t *testing.T) {
 
 	want := &SFlowDatagram{
 		DatagramVersion: uint32(5),
-		AgentAddress:    []byte{0x0a, 0x14, 0x04, 0x00},
-		SubAgentID:      uint32(0x64),
-		SequenceNumber:  uint32(96480),
-		AgentUptime:     uint32(1929595000),
-		SampleCount:     uint32(1),
+		AgentAddress:    []byte{0x7f, 0x00, 0x00, 0x01},
+		SubAgentID:      uint32(0x00),
+		SequenceNumber:  uint32(15040),
+		AgentUptime:     uint32(83113000),
+		SampleCount:     uint32(4),
 		CounterSamples: []SFlowCounterSample{
 			SFlowCounterSample{
 				Format:         SFlowTypeExpandedCounterSample,

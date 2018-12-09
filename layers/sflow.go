@@ -2291,7 +2291,6 @@ func decodeAppresourcesCounters(data *[]byte) (SFlowAppresourcesCounters, error)
 	*data, app.conn_max = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 
 	return app, nil
-
 }
 
 type SFlowOVSDPCounters struct {
@@ -2305,20 +2304,20 @@ type SFlowOVSDPCounters struct {
 }
 
 func decodeOVSDPCounters(data *[]byte) (SFlowOVSDPCounters, error) {
-	ovsdp := SFlowOVSDPCounters{}
+	dp := SFlowOVSDPCounters{}
 	var cdf SFlowCounterDataFormat
 
 	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
-	ovsdp.EnterpriseID, ovsdp.Format = cdf.decode()
-	*data, ovsdp.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_missed = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_lost = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_mask_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_flows = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, ovsdp.n_masks = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	dp.EnterpriseID, dp.Format = cdf.decode()
+	*data, dp.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_missed = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_lost = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_mask_hit = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_flows = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, dp.n_masks = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 
-	return ovsdp, nil
+	return dp, nil
 }
 
 /*type SFLString struct {
@@ -2355,9 +2354,11 @@ type SFLLACPportState struct {
 type LACPcounters struct {
 	SFlowBaseCounterRecord
 	actorSystemID uint64
-	pad1[2] uint8
+	pad1_0 uint8
+	pad1_1 uint8
 	partnerSystemID uint64
-	pad2[2] uint8
+	pad2_0 uint8
+	pad2_1 uint8
 	attachedAggID uint32
 	lacp_portstate SFLLACPportState
 	LACPDUsRx uint32
@@ -2371,32 +2372,32 @@ type LACPcounters struct {
 }
 
 func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
-	lacp := LACPcounters{}
+	la := LACPcounters{}
 	var cdf SFlowCounterDataFormat
 
 	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
-	lacp.EnterpriseID, lacp.Format = cdf.decode()
-	*data, lacp.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.actorSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, lacp.pad1[0] = (*data)[1:], (*data)[0]
-	*data, lacp.pad1[1] = (*data)[1:], (*data)[0]
-	*data, lacp.partnerSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, lacp.pad2[0] = (*data)[1:], (*data)[0]
-	*data, lacp.pad2[1] = (*data)[1:], (*data)[0]
-	*data, lacp.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
-	*data, lacp.lacp_portstate.actorOper = (*data)[1:], (*data)[0]
-	*data, lacp.lacp_portstate.partnerAdmin = (*data)[1:], (*data)[0]
-	*data, lacp.lacp_portstate.partnerOper = (*data)[1:], (*data)[0]
-	*data, lacp.LACPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.markerPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.markerResponsePDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.unknownRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.illegalRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.LACPDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.markerPDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	*data, lacp.markerResponsePDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	la.EnterpriseID, la.Format = cdf.decode()
+	*data, la.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.actorSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
+	*data, la.pad1_0 = (*data)[1:], (*data)[0]
+	*data, la.pad1_1 = (*data)[1:], (*data)[0]
+	*data, la.partnerSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
+	*data, la.pad2_0 = (*data)[1:], (*data)[0]
+	*data, la.pad2_1 = (*data)[1:], (*data)[0]
+	*data, la.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
+	*data, la.lacp_portstate.actorOper = (*data)[1:], (*data)[0]
+	*data, la.lacp_portstate.partnerAdmin = (*data)[1:], (*data)[0]
+	*data, la.lacp_portstate.partnerOper = (*data)[1:], (*data)[0]
+	*data, la.LACPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.markerPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.markerResponsePDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.unknownRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.illegalRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.LACPDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.markerPDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, la.markerResponsePDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 
-	return lacp, nil
+	return la, nil
 }
