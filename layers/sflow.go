@@ -2354,11 +2354,9 @@ type SFLLACPportState struct {
 type LACPcounters struct {
 	SFlowBaseCounterRecord
 	actorSystemID uint64
-	pad1_0 uint8
-	pad1_1 uint8
+	pad1_2 uint8
 	partnerSystemID uint64
-	pad2_0 uint8
-	pad2_1 uint8
+	pad2_2 uint8
 	attachedAggID uint32
 	lacp_portstate SFLLACPportState
 	LACPDUsRx uint32
@@ -2379,11 +2377,9 @@ func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
 	la.EnterpriseID, la.Format = cdf.decode()
 	*data, la.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.actorSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, la.pad1_0 = (*data)[1:], (*data)[0]
-	*data, la.pad1_1 = (*data)[1:], (*data)[0]
+	*data, la.pad1_2 = (*data)[1:], (*data)[0]
 	*data, la.partnerSystemID = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
-	*data, la.pad2_0 = (*data)[1:], (*data)[0]
-	*data, la.pad2_1 = (*data)[1:], (*data)[0]
+	*data, la.pad2_2 = (*data)[1:], (*data)[0]
 	*data, la.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
