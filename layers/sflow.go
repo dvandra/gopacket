@@ -2344,10 +2344,6 @@ func decodePortnameCounters(data *[]byte) (SFlowPORTNAME, error) {
 
 type SFLLACPportState struct {
 	portstate_all uint32
-	actorAdmin uint8
-	actorOper uint8
-	partnerAdmin uint8
-	partnerOper uint8
 }
 
 type EthAdd struct {
@@ -2391,10 +2387,6 @@ func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
 	*data, la.pad2[1] = (*data)[1:], (*data)[0]
 	*data, la.attachedAggID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.lacp_portstate.portstate_all = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
-	//*data, la.lacp_portstate.actorAdmin = (*data)[1:], (*data)[0]
-	//*data, la.lacp_portstate.actorOper = (*data)[1:], (*data)[0]
-	//*data, la.lacp_portstate.partnerAdmin = (*data)[1:], (*data)[0]
-	//*data, la.lacp_portstate.partnerOper = (*data)[1:], (*data)[0]
 	*data, la.LACPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.markerPDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 	*data, la.markerResponsePDUsRx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])

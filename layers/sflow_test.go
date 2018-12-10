@@ -284,6 +284,44 @@ var SFlowTestPacket8 = []byte{
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x80,
 }
 
+//Counter Sample - OVS-SFLOW Counter Sample Types: OpenFLow Port, PORT Name, APPResources, OVSDP - LACP Counter
+var SFlowTestPacket9 = []byte{
+	0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x01,
+	0x7f, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x38, 0xe5, 0x05, 0xae, 0x16, 0x18,
+	0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02,
+	0x00, 0x00, 0x01, 0x10, 0x00, 0x00, 0x0d, 0x30,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4b,
+	0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x03, 0xec,
+	0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x7e, 0x60,
+	0x69, 0x73, 0x8f, 0x42, 0x00, 0x00, 0x00, 0x02,
+	0x00, 0x00, 0x03, 0xed, 0x00, 0x00, 0x00, 0x0c,
+	0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x7f, 0xff,
+	0x00, 0x7b, 0xcc, 0xe0, 0x00, 0x00, 0x00, 0x07,
+	0x00, 0x00, 0x00, 0x38, 0x7e, 0x60, 0x69, 0x73,
+	0x8f, 0x42, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0xe1, 0x00, 0x00, 0x00, 0x00, 0x01,
+	0x05, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x04, 0x95, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x02,
+	0x00, 0x00, 0x00, 0x5c, 0x00, 0x00, 0x07, 0x0a,
+	0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x03, 0xe8,
+	0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x08, 0x9b,
+	0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0xa8, 0x65,
+	0x00, 0x00, 0xc5, 0x06, 0x00, 0x00, 0x00, 0x00,
+	0x06, 0x89, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x9f,
+	0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x08, 0x94,
+	0x00, 0x00, 0x02, 0xe8, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x0c, 0x4f, 0x00, 0x00, 0x00, 0x01,
+	0x00, 0x00, 0x00, 0x02,
+}
+
+
 func TestDecodeUDPSFlow(t *testing.T) {
 	p := gopacket.NewPacket(SFlowTestPacket1, LayerTypeEthernet, gopacket.Default)
 	if p.ErrorLayer() != nil {
@@ -907,117 +945,11 @@ func TestDecodeProcessorCounter(t *testing.T) {
 		SubAgentID:      uint32(0x64),
 		SequenceNumber:  uint32(96480),
 		AgentUptime:     uint32(1929595000),
-		SampleCount:     uint32(3),
+		SampleCount:     uint32(1),
 		CounterSamples: []SFlowCounterSample{//28
 			SFlowCounterSample{
 				Format:         SFlowTypeExpandedCounterSample,
 				SampleLength:   0x5c,
-				SequenceNumber: 0x0178e0,
-				SourceIDClass:  0x00,
-				SourceIDIndex:  0x01,
-				RecordCount:    0x03,
-				Records: []SFlowRecord{
-					SFlowProcessorCounters{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypeProcessorCounters,
-							FlowDataLength: 0x1c,
-						},
-						FiveSecCpu:  0x05aa,
-						OneMinCpu:   0x055a,
-						FiveMinCpu:  0x0532,
-						TotalMemory: 0xe78d7000,
-						FreeMemory:  0x55e77000,
-					},
-					SFlowOpenflowPortCounters{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypeOpenflowPortCounters,//3EC
-							FlowDataLength: 0x0c,
-						},
-						Datapath_id: 0x2a046469bf4a,
-						Port_no:     0x02,
-					},
-					SFlowPORTNAME{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypePORTNAMECounters,//3Ed
-							FlowDataLength: 0x0c,
-						},
-						len: 0x08,
-						str: string(0x00007fff007bcce0), //assinjng a pointer to a char or string
-					},
-					/*SFlowAppresourcesCounters{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypeOpenflowPortCounters,//3EC
-							FlowDataLength: 0x1c,
-						},
-					},
-					SFlowOVSDPCounters{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypeOpenflowPortCounters,//3EC
-							FlowDataLength: 0x1c,
-						},
-					},
-					LACPcounters{
-						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
-							EnterpriseID:   0x0,
-							Format:         SFlowTypeOpenflowPortCounters,//3EC
-							FlowDataLength: 0x1c,
-						},
-					},*/
-				},
-			},
-		},
-	}
-	if !reflect.DeepEqual(want, got) {
-		t.Errorf("SFlow layer mismatch, \nwant:\n\n%#v\ngot:\n\n\n%#v\n\n", want, got)
-	}
-}
-
-/*
-2018-12-05T15:40:21.132+0530	INFO	sflow/agent.go:97 (*Agent).feedFlowTable	localhost.localdomain: Value of p = PACKET: 244 bytes- Layer 1 (00 bytes) = SFlow	{Contents=[] Payload=[] DatagramVersion=5 AgentAddress=127.0.0.1 SubAgentID=0 SequenceNumber=15040 AgentUptime=83113000 SampleCount=1 FlowSamples=[] CounterSamples=[{EnterpriseID=Standard SFlow Format=Counter Sample SampleLength=208 SequenceNumber=2698 SourceIDClass=Single Interface SourceIDIndex=37 RecordCount=4 Records=[{EnterpriseID=Standard SFlow Format=Ethernet Interface Counters FlowDataLength=52 AlignmentErrors=0 FCSErrors=0 SingleCollisionFrames=4294967295 MultipleCollisionFrames=4294967295 SQETestErrors=4294967295 DeferredTransmissions=4294967295 LateCollisions=4294967295 ExcessiveCollisions=4294967295 InternalMacTransmitErrors=4294967295 CarrierSenseErrors=4294967295 FrameTooLongs=4294967295 InternalMacReceiveErrors=4294967295 SymbolErrors=4294967295}, {EnterpriseID=Standard SFlow Format=Openflow Port Counters FlowDataLength=12 Datapath_id=46198352887626 Port_no=2}, {EnterpriseID=Standard SFlow Format=PORT NAME Counters FlowDataLength=12}, {EnterpriseID=Standard SFlow Format=Generic Interface Counters FlowDataLength=88 IfIndex=37 IfType=6 IfSpeed=10000000000 IfDirection=1 IfStatus=3 IfInOctets=1986 IfInUcastPkts=27 IfInMulticastPkts=0 IfInBroadcastPkts=4294967295 IfInDiscards=0 IfInErrors=0 IfInUnknownProtos=4294967295 IfOutOctets=40206 IfOutUcastPkts=365 IfOutMulticastPkts=4294967295 IfOutBroadcastPkts=4294967295 IfOutDiscards=0 IfOutErrors=0 IfPromiscuousMode=0}]}]}
-
-*/
-
-/*0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x01,
-0x7f, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
-0x00, 0x00, 0x3a, 0xc0, 0x73, 0x03, 0x48, 0x78,
-0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x04,
-0x00, 0x00, 0x00, 0x34, 0x00, 0x01, 0x78, 0xe0,
-0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01,
-0x00, 0x00, 0x00, 0x01,
-
-0x00, 0x00, 0x03, 0xed, 0x00, 0x00, 0x00, 0x0c,
-0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x7f, 0xff,
-0x00, 0x7b, 0xcc, 0xe0,
-
-0x00, 0x00, 0x00, 0x00, 0xe7, 0x8d, 0x70, 0x00,
-0x00, 0x00, 0x00, 0x00, 0x55, 0xe7, 0x70, 0x00*/
-
-func TestDecodeProcessorCounter(t *testing.T) {
-	p := gopacket.NewPacket(SFlowTestPacket3, LayerTypeSFlow, gopacket.Default)
-
-	if p.ErrorLayer() != nil {
-		t.Error("Failed to decode packet:", p.ErrorLayer().Error())
-	}
-	checkLayers(p, []gopacket.LayerType{LayerTypeSFlow}, t)
-
-	got := p.ApplicationLayer().(*SFlowDatagram)
-
-	want := &SFlowDatagram{
-		DatagramVersion: uint32(5),
-		AgentAddress:    []byte{0x7f, 0x00, 0x00, 0x01},
-		SubAgentID:      uint32(0x00),
-		SequenceNumber:  uint32(15040),
-		AgentUptime:     uint32(83113000),
-		SampleCount:     uint32(4),
-		CounterSamples: []SFlowCounterSample{
-			SFlowCounterSample{
-				Format:         SFlowTypeExpandedCounterSample,
-				SampleLength:   0x34,
 				SequenceNumber: 0x0178e0,
 				SourceIDClass:  0x00,
 				SourceIDIndex:  0x01,
@@ -1034,6 +966,118 @@ func TestDecodeProcessorCounter(t *testing.T) {
 						FiveMinCpu:  0x0532,
 						TotalMemory: 0xe78d7000,
 						FreeMemory:  0x55e77000,
+					},
+				},
+			},
+		},
+	}
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("SFlow layer mismatch, \nwant:\n\n%#v\ngot:\n\n\n%#v\n\n", want, got)
+	}
+}
+
+func TestDecodeOVSSFlowCounter(t *testing.T) {
+	p := gopacket.NewPacket(SFlowTestPacket9, LayerTypeSFlow, gopacket.Default)
+
+	if p.ErrorLayer() != nil {
+		t.Error("Failed to decode packet:", p.ErrorLayer().Error())
+	}
+	checkLayers(p, []gopacket.LayerType{LayerTypeSFlow}, t)
+
+	got := p.ApplicationLayer().(*SFlowDatagram)
+
+	want := &SFlowDatagram{
+		DatagramVersion: uint32(5),
+		AgentAddress:    []byte{0x7f, 0x00, 0x00, 0x01},
+		SubAgentID:      uint32(0x00),
+		SequenceNumber:  uint32(14565),
+		AgentUptime:     uint32(95295000),
+		SampleCount:     uint32(2),
+		CounterSamples: []SFlowCounterSample{
+			SFlowCounterSample{
+				Format:         SFlowTypeCounterSample,
+				SampleLength:   0x74,
+				SequenceNumber: 0x0d30,
+				SourceIDClass:  0x00,
+				SourceIDIndex:  0x4b,
+				RecordCount:    0x03,
+				Records: []SFlowRecord{
+					SFlowOpenflowPortCounters{
+						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
+							EnterpriseID:   0x0,
+							Format:         SFlowTypeOpenflowPortCounters,
+							FlowDataLength: 0x0c,
+						},
+						Datapath_id: 0x7e6069738f42,
+						Port_no:     0x02,
+					},
+					SFlowPORTNAME{
+						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
+							EnterpriseID:   0x0,
+							Format:         SFlowTypePORTNAMECounters,
+							FlowDataLength: 0x0c,
+						},
+						len: 0x08,
+						str: string(0x00007fff007bcce0), //assinjng a pointer to a char or string
+					},
+					LACPcounters{
+						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
+							EnterpriseID:   0x0,
+							Format:         SFlowTypeLACPCounters,
+							FlowDataLength: 0x38,
+						},
+						actorSystemID : EthAdd{eth: [3]uint16{uint16(32352), uint16(26995), uint16(36674)}},
+						pad1 : [2]uint8{uint8(0), uint8(6)},
+						partnerSystemID : EthAdd{eth: [3]uint16{uint16(0), uint16(0), uint16(0)}},
+						pad2 : [2]uint8{uint8(225), uint8(0)},
+						attachedAggID: uint32(1),
+						lacp_portstate: SFLLACPportState{portstate_all: uint32(91553792)},
+						LACPDUsRx: uint32(0),
+						markerPDUsRx: uint32(4294967295),
+						markerResponsePDUsRx: uint32(4294967295),
+						unknownRx: uint32(4294967295),
+						illegalRx: uint32(0),
+						LACPDUsTx: uint32(1173),
+						markerPDUsTx: uint32(4294967295),
+						markerResponsePDUsTx: uint32(4294967295),
+					},
+				},
+			},
+			SFlowCounterSample{
+				Format:         SFlowTypeCounterSample,
+				SampleLength:   0x5c,//92
+				SequenceNumber: 0x070a,//1802
+				SourceIDClass:  0x00,//single interface
+				SourceIDIndex:  0x20003e8,//33555432, 20003E8
+				RecordCount:    0x02,//2
+				Records: []SFlowRecord{
+					SFlowAppresourcesCounters{
+						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
+							EnterpriseID:   0x0,
+							Format:         SFLowTypeAPPRESOURCESCounters,//89B
+							FlowDataLength: 0x28,//40
+						},
+						user_time :  uint32(43109),//A865
+						system_time: uint32(50438),//C506
+						mem_used :   uint64(109699072),//689E000
+						mem_max  :   uint64(0),
+						fd_open  :  uint32(0),
+						fd_max  :    uint32(0),
+						conn_open :  uint32(0),
+						conn_max  :  uint32(0),
+					},
+					SFlowOVSDPCounters{
+						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
+							EnterpriseID:   0x0,
+							Format:         SFlowTypeOVSDPCounters,//89F
+							FlowDataLength: 0x18,//24
+						},
+						n_hit  :    uint32(2196),
+						n_missed:   uint32(744),
+						n_lost  :   uint32(0),
+						n_mask_hit: uint32(3151),
+						n_flows :   uint32(1),
+						n_masks :   uint32(2),
 					},
 				},
 			},
