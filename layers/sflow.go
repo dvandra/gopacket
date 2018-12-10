@@ -2319,10 +2319,6 @@ func decodeOVSDPCounters(data *[]byte) (SFlowOVSDPCounters, error) {
 	return dp, nil
 }
 
-/*type SFLString struct {
-
-}*/
-
 type SFlowPORTNAME struct {
 	SFlowBaseCounterRecord
 	len uint32
