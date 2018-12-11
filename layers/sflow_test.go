@@ -1008,8 +1008,8 @@ func TestDecodeOVSSFlowCounter(t *testing.T) {
 							Format:         SFlowTypeOpenflowPortCounters,
 							FlowDataLength: 0x0c,
 						},
-						Datapath_id: 0x7e6069738f42,
-						Port_no:     0x02,
+						DatapathId: 0x7e6069738f42,
+						PortNo:     0x02,
 					},
 					SFlowPORTNAME{
 						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
@@ -1026,12 +1026,12 @@ func TestDecodeOVSSFlowCounter(t *testing.T) {
 							Format:         SFlowTypeLACPCounters,
 							FlowDataLength: 0x38,
 						},
-						actorSystemID : EthAdd{eth: [3]uint16{uint16(32352), uint16(26995), uint16(36674)}},
+						actorSystemID : net.HardwareAddr{0x7e, 0x60, 0x69, 0x73, 0x8f, 0x42},
 						pad1 : [2]uint8{uint8(0), uint8(6)},
-						partnerSystemID : EthAdd{eth: [3]uint16{uint16(0), uint16(0), uint16(0)}},
+						partnerSystemID : net.HardwareAddr{0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 						pad2 : [2]uint8{uint8(225), uint8(0)},
 						attachedAggID: uint32(1),
-						lacp_portstate: SFLLACPportState{portstate_all: uint32(91553792)},
+						lacpPortState: SFLLACPportState{portStateAll: uint32(91553792)},
 						LACPDUsRx: uint32(0),
 						markerPDUsRx: uint32(4294967295),
 						markerResponsePDUsRx: uint32(4294967295),
@@ -1057,14 +1057,14 @@ func TestDecodeOVSSFlowCounter(t *testing.T) {
 							Format:         SFLowTypeAPPRESOURCESCounters,//89B
 							FlowDataLength: 0x28,//40
 						},
-						user_time :  uint32(43109),//A865
-						system_time: uint32(50438),//C506
-						mem_used :   uint64(109699072),//689E000
-						mem_max  :   uint64(0),
-						fd_open  :  uint32(0),
-						fd_max  :    uint32(0),
-						conn_open :  uint32(0),
-						conn_max  :  uint32(0),
+						userTime :  uint32(43109),//A865
+						systemTime: uint32(50438),//C506
+						memUsed :   uint64(109699072),//689E000
+						memMax  :   uint64(0),
+						fdOpen  :  uint32(0),
+						fdMax  :    uint32(0),
+						connOpen :  uint32(0),
+						connMax  :  uint32(0),
 					},
 					SFlowOVSDPCounters{
 						SFlowBaseCounterRecord: SFlowBaseCounterRecord{
@@ -1072,12 +1072,12 @@ func TestDecodeOVSSFlowCounter(t *testing.T) {
 							Format:         SFlowTypeOVSDPCounters,//89F
 							FlowDataLength: 0x18,//24
 						},
-						n_hit  :    uint32(2196),
-						n_missed:   uint32(744),
-						n_lost  :   uint32(0),
-						n_mask_hit: uint32(3151),
-						n_flows :   uint32(1),
-						n_masks :   uint32(2),
+						nHit  :    uint32(2196),
+						nMissed:   uint32(744),
+						nLost  :   uint32(0),
+						nMaskHit: uint32(3151),
+						nFlows :   uint32(1),
+						nMasks :   uint32(2),
 					},
 				},
 			},
