@@ -764,8 +764,11 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 			skipRecord(data)
 			return s, errors.New("skipping Type100BaseVGInterfaceCounters")
 		case SFlowTypeVLANCounters:
-			skipRecord(data)
-			return s, errors.New("skipping TypeVLANCounters")
+			if record, err := decodeVLANCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
 		case SFlowTypeLACPCounters:
 			if record, err := decodeLACPCounters(data); err == nil {
 				s.Records = append(s.Records, record)
@@ -2389,4 +2392,33 @@ func decodeLACPCounters(data *[]byte) (LACPcounters, error) {
 	*data, la.MarkerResponsePDUsTx = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
 
 	return la, nil
+}
+
+// VLAN Counter
+
+type SFlowVLANCounters struct {
+	SFlowBaseCounterRecord
+	VlanID        uint32
+	Octets        uint64
+	UcastPkts     uint32
+	MulticastPkts uint32
+	BroadcastPkts uint32
+	Discards      uint32
+}
+
+func decodeVLANCounters(data *[]byte) (SFlowVLANCounters, error) {
+	vc := SFlowVLANCounters{}
+	var cdf SFlowCounterDataFormat
+
+	*data, cdf = (*data)[4:], SFlowCounterDataFormat(binary.BigEndian.Uint32((*data)[:4]))
+	vc.EnterpriseID, vc.Format = cdf.decode()
+	vc.EnterpriseID, vc.Format = cdf.decode()
+	*data, vc.FlowDataLength = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, vc.VlanID = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, vc.Octets = (*data)[8:], binary.BigEndian.Uint64((*data)[:8])
+	*data, vc.UcastPkts = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, vc.MulticastPkts = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, vc.BroadcastPkts = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	*data, vc.Discards = (*data)[4:], binary.BigEndian.Uint32((*data)[:4])
+	return vc, nil
 }
