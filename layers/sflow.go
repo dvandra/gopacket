@@ -679,6 +679,7 @@ func (cs SFlowCounterSample) GetType() SFlowSampleType {
 type SFlowCounterRecordType uint32
 
 const (
+	SFlowTypezero                       SFlowCounterRecordType = 0
 	SFlowTypeGenericInterfaceCounters   SFlowCounterRecordType = 1
 	SFlowTypeEthernetInterfaceCounters  SFlowCounterRecordType = 2
 	SFlowTypeTokenRingInterfaceCounters SFlowCounterRecordType = 3
@@ -694,6 +695,8 @@ const (
 
 func (cr SFlowCounterRecordType) String() string {
 	switch cr {
+	case SFlowTypezero:
+		return "Type zero"
 	case SFlowTypeGenericInterfaceCounters:
 		return "Generic Interface Counters"
 	case SFlowTypeEthernetInterfaceCounters:
@@ -751,6 +754,9 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 			} else {
 				return s, err
 			}
+		case SFlowTypezero:
+			skipRecord(data)
+			return s, errors.New("skipping Typezero")
 		case SFlowTypeEthernetInterfaceCounters:
 			if record, err := decodeEthernetCounters(data); err == nil {
 				s.Records = append(s.Records, record)
