@@ -755,8 +755,11 @@ func decodeCounterSample(data *[]byte, expanded bool) (SFlowCounterSample, error
 				return s, err
 			}
 		case SFlowTypezero:
-			skipRecord(data)
-			return s, errors.New("skipping Typezero")
+			if record, err := decodeGenericInterfaceCounters(data); err == nil {
+				s.Records = append(s.Records, record)
+			} else {
+				return s, err
+			}
 		case SFlowTypeEthernetInterfaceCounters:
 			if record, err := decodeEthernetCounters(data); err == nil {
 				s.Records = append(s.Records, record)
